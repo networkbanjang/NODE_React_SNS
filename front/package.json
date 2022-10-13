@@ -1,0 +1,26 @@
+{
+  "name": "react-nodebird-front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "bulid": "next build"
+  },
+  "author": "SEONG SEUNG YOUNG",
+  "license": "MIT",
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.23.5",
+    "next": "^12.3.1",
+    "next-redux-wrapper": "^6.0.2",
+    "prop-types": "^15.8.1",
+    "redux": "^4.2.0",
+    "styled-components": "^5.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}
