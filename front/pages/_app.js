@@ -11,7 +11,7 @@ const App = ({ Component }) => {
                 <meta charSet="utf-8" />
                 <title>SNS</title>
             </Head>
-            <Component />
+            <Component  />
 
         </>)
 }

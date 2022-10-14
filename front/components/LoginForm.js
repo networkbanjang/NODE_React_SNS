@@ -2,7 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../reducers/user';
+import useinput from "../hooks/useinput";
+
 
 
 const ButtonWrapper = styled.div`
@@ -11,16 +15,14 @@ margin-top:10px;
 const FormWrapper=styled(Form)`
   padding : 10px;
 `;
-const LoginForm = ({ setIsLoggendIn }) => {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-
-  const onChangeId = useCallback(e => setId(e.target.value), []);
-  const onChangePassword = useCallback(e => setPassword(e.target.value), []);
+const LoginForm = () => {
+  const dispath = useDispatch();
+  const [id, onChangeId] = useinput('');
+  const [password, onChangePassword] = useinput('');
 
   const onSubmitForm = useCallback(() => {
     console.log(id, password),
-      setIsLoggendIn(true);
+    dispath(loginAction({id,password}));
   }, [id, password]);
 
   return (

@@ -1,9 +1,13 @@
 import { Avatar, Button, Card } from "antd";
+import { useDispatch } from "react-redux";
 import {useCallback} from 'react';
 
-const UserProfile = ({setIsLoggendIn}) => {
+import {logoutAction} from '../reducers/user'
+
+const UserProfile = () => {
+  const dispath = useDispatch();
   const logout = useCallback(()=>{
-    setIsLoggendIn(false);
+    dispath(logoutAction());
   },[])
   return (
     <Card
