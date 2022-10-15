@@ -27,7 +27,7 @@ const CommentForm = ({ post }) => {
   );
 }
 
-CommentForm.PropTypes = {
+CommentForm.prototype = {
   post: PropTypes.shape({
     id: PropTypes.number,
     User: PropTypes.object,

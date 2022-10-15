@@ -1,5 +1,5 @@
 export const initialState = {
-  
+
   mainPosts: [{
     id: 1,
     User: {
@@ -8,12 +8,12 @@ export const initialState = {
     },
     content: '첫 번째 게시글 #해시태그 #익스프레스',
     Images: [{
-      src: 'https://www.techm.kr/news/photo/202007/73141_65065_2532.png'
-    }, {
-      src: 'https://mblogthumb-phinf.pstatic.net/MjAyMTAzMTRfMTQ2/MDAxNjE1NjQ4MTg4NjM4.gQjXb85eUe25ZC9UVvtRIhRsYhL_jfjHcTjGuGIjAnAg.h_8AZrIxuRghWVj_gBbtQbiKDEvKPDxht1KeT1QdtB4g.JPEG.bonamy/IMG_2024.jpg?type=w800'
-    }, {
       src: 'https://img.stibee.com/21735_1662999430.png'
-    }],
+    },{
+    src: 'https://www.techm.kr/news/photo/202007/73141_65065_2532.png'
+  }, {
+    src: 'https://mblogthumb-phinf.pstatic.net/MjAyMTAzMTRfMTQ2/MDAxNjE1NjQ4MTg4NjM4.gQjXb85eUe25ZC9UVvtRIhRsYhL_jfjHcTjGuGIjAnAg.h_8AZrIxuRghWVj_gBbtQbiKDEvKPDxht1KeT1QdtB4g.JPEG.bonamy/IMG_2024.jpg?type=w800'
+  }],
     Comments: [{
       User: {
         nickname: '후후'
@@ -53,7 +53,7 @@ const reducer = (state = initialState, action) => {
     case ADD_POST:
       return {
         ...state,
-        mainPosts: [ dummyPost, ...state.mainPosts ],
+        mainPosts: [dummyPost, ...state.mainPosts],
         postAdded: true,
       }
     default:

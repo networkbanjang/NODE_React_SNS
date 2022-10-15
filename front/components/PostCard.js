@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import PostImages from './Postimages';
 import { useMemo, useState, useCallback } from 'react'
 import CommentForm from './CommentForm';
+import PostCardContent from './PostCardContent';
 
 const PostCard = ({ post }) => {
   //css영역
@@ -27,7 +28,7 @@ const PostCard = ({ post }) => {
   return (
     <div style={style}>
       <Card
-        cover={post.Images[0] && <PostImages Images={post.Images} />}
+        cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="reteet" />,   //리트윗 아이콘 배열엔 반드시 key
           liked
@@ -45,10 +46,11 @@ const PostCard = ({ post }) => {
           </Popover>,
         ]}
       >
-        <Card.Meta
+        
+        <Card.Meta  
           tar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={<PostCardContent postData={post.content}/>}
         />
         <Button></Button>
       </Card>
@@ -76,7 +78,7 @@ const PostCard = ({ post }) => {
   )
 }
 
-PostCard.PropTypes = {
+PostCard.prototype = {
   post: PropTypes.shape({
     id: PropTypes.number,
     User: PropTypes.object,
