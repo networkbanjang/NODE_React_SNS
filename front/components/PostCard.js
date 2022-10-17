@@ -1,13 +1,16 @@
 import { Card, Button, Popover, Avatar, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostImages from './Postimages';
 import { useMemo, useState, useCallback } from 'react'
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST } from '../reducers/post';
+import FollowButton from './Follow';
 
 const PostCard = ({ post }) => {
+  const dispatch=useDispatch();
   //css영역
   const style = useMemo(() => ({
     marginBottom: '20px',
@@ -16,13 +19,22 @@ const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState(false);
 
+
   //이벤트 처리 영역
   const onToggleLike = useCallback(() => {
     setLiked(prev => !prev);
   }, []);
   const onComment = useCallback(() => {
     setComment(prev => !prev);
-  })
+  },[])
+
+  const onRemovePost =useCallback(()=>{
+    dispatch({
+      type:REMOVE_POST_REQUEST,
+      data : post.id,
+    })
+  },[]);
+
   //아이디 체크 그런데 백엔드 구현하면 바뀔듯
   const id = useSelector((state) => state.user).me?.id;  //옵셔널 체이닝 AA ?. BB == 있으면 해라
   return (
@@ -38,13 +50,14 @@ const PostCard = ({ post }) => {
           <Popover key="more" content={(
             <Button.Group>
               {id && post.User.id === id ? (<><Button type='primary'>수정</Button>
-                <Button type='danger'>삭제</Button> </>)
+                <Button type='danger' onClick={onRemovePost}>삭제</Button> </>)
                 : <Button>신고</Button>}
             </Button.Group>
           )}>
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         
         <Card.Meta  

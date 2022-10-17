@@ -1,27 +1,30 @@
 import { Form, Input, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useRef, useState } from 'react';
-import useinput from "../hooks/useinput";
-import { addPost } from "../reducers/post";
+import { addPostRequest } from "../reducers/post";
 
 const PostForm = () => {
   const { imagePaths } = useSelector((state) => state.post);
-  const disspatch = useDispatch();
+  const dispatch = useDispatch();
   //이미지
-  const imageInput = useRef();
+  const imageInput = useRef();              //파일버튼 숨기기
   const onClickImageUpload = useCallback(() => {
-    imageInput.current.click();
+    imageInput.current.click();              //imageInput을 클릭한걸로 만든다
   }, [imageInput.current])
+
+
   ///텍스트
   const [text, setText] = useState('');
-  const onChangeText=useCallback((event)=>{
+  const onChangeText = useCallback((event) => {
     setText(event.target.value);
-  },[])
+  }, [])
+
+
   //전송후 초기화
   const onsubmit = useCallback(() => {
-    disspatch(addPost)
+    dispatch(addPostRequest(text));
     setText('')
-  }, [])
+  }, [text])
 
 
   return (

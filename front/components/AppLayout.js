@@ -13,20 +13,20 @@ const SearchInput = styled(Input.Search)`
 
 
 const AppLayout = ({ children }) => {
-  const isLoggedIn = useSelector((state)=>state.user.isLoggedIn);
+  const {me} = useSelector((state)=>state.user);
 
   return (
     <div>
       <Menu mode="horizontal">
-        <Menu.Item><Link href="/"><a>노드버드</a></Link></Menu.Item>
-        <Menu.Item><Link href="/profile"><a>프로필</a></Link></Menu.Item>
-        <Menu.Item> <SearchInput enterButton /></Menu.Item>
+        <Menu.Item key='123'><Link href="/"><a>노드버드</a></Link></Menu.Item>
+        <Menu.Item key='234'><Link href="/profile"><a>프로필</a></Link></Menu.Item>
+        <Menu.Item key='456'> <SearchInput enterButton /></Menu.Item>
 
-        <Menu.Item><Link href="/signUp"><a>회원가입</a></Link></Menu.Item>
+        <Menu.Item key='kekeke'><Link href="/signUp"><a>회원가입</a></Link></Menu.Item>
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6} >
-          {isLoggedIn ? <UserProfile /> : <LoginForm/>}
+          {me ? <UserProfile /> : <LoginForm/>}
         </Col>
         <Col xs={24} md={12} >
           {children}
