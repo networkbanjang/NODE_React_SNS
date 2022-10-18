@@ -1,22 +1,35 @@
 import AppLayout from "../components/AppLayout";
 import Head from 'next/head'
 import { Form, Input, Checkbox, Button } from "antd";
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo ,useEffect} from 'react';
 import useinput from "../hooks/useinput";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGN_UP_REQUEST } from "../reducers/user";
+import Router from "next/router";
 
 const SingUp = () => {
   const [email, onChangeEmail] = useinput('');
   const [nick, onChangeNick] = useinput('');
   const [password, onChangePassword] = useinput('');
 
-  const dispatch=useDispatch();
-  const {signUpLoading} = useSelector((state)=>state.user);
+  const dispatch = useDispatch();
+  const { signUpLoading,signUpDone,signUpError } = useSelector((state) => state.user);
 
   const style = useMemo(() => ({   //스타일설정
     color: 'red',
   }), [])
+
+  useEffect(()=>{
+    if(signUpDone){
+      Router.replace('/');
+    }
+  },[signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
 
   const [passowrdCheck, setPasswordCheck] = useState('');
   const [passowrdError, setPasswordError] = useState(false);
@@ -35,17 +48,17 @@ const SingUp = () => {
   }, [])
 
   const onsubmit = useCallback(() => {
-    if (password !==passowrdCheck){
+    if (password !== passowrdCheck) {
       return setPasswordError(true);
     }
-    if(!term){
+    if (!term) {
       return setTermError(true);
     }
     dispatch({
-      tyoe:SIGN_UP_REQUEST,
-      data:{email,password,nick}
-    })
-  }, [email,password,passowrdCheck,term]);
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nick },
+    });
+  }, [email, password, passowrdCheck, term, nick]);
 
   return (
     <AppLayout>
@@ -78,8 +91,8 @@ const SingUp = () => {
           <Checkbox name='user-term' checked={term} onChange={onChangeTerm}>약관에 동의합니다.</Checkbox>
           {termError && <div style={style}> 약관에 동의하셔야 합니다</div>}
         </div>
-        <div style={{marginTop:10}}>
-          <Button type ="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
+        <div style={{ marginTop: 10 }}>
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
         </div>
       </Form>
     </AppLayout>

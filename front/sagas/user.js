@@ -1,6 +1,9 @@
-import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
-import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
+import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, 
+  LOG_OUT_FAILURE, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
 import { LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS } from '../reducers/user';
+import axios from 'axios'
+
 function logInAPI() {
   return axios.post('api/login')
 }
@@ -16,7 +19,7 @@ function* login(action) {
   } catch (error) {
     yield put({
       type: LOG_IN_FAILURE,
-      data: error.reponse.data,
+      error: error.reponse.data,
     })
   }
 }
@@ -35,27 +38,28 @@ function* logOut() {
   } catch (error) {
     yield put({
       type: LOG_OUT_FAILURE,
-      data: error.reponse.data,
+      error: error.reponse.data,
     })
   }
 }
 
-function signUpAPI() {
-  return axios.post('.api/signUp')
+function signUpAPI(data) {
+  return axios.post('http://localhost:3065/user',data);  //data는 객체
 }
 
-function* signUP() {
+function* signUP(action) {
   try {
-    //const result = yield call(signUpAPI);
-    yield delay(1000);
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
-  } catch (error) {
+  } catch (err) {
+    console.error('에러',err);
     yield put({
       type: SIGN_UP_FAILURE,
-      data: error.reponse.data,
-    })
+      error: err.response.data,
+    });
   }
 }
 
@@ -74,7 +78,7 @@ function* follow(action) {
   } catch (error) {
     yield put({
       type: FOLLOW_FAILURE,
-      data: error.reponse.data,
+      error: error.reponse.data,
     })
   }
 }
@@ -94,7 +98,7 @@ function* unfollow(action) {
   } catch (error) {
     yield put({
       type: UNFOLLOW_FAILURE,
-      data: error.reponse.data,
+      error: error.reponse.data,
     })
   }
 }

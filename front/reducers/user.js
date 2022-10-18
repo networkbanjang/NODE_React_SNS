@@ -109,7 +109,7 @@ const reducer = (state = initialState, action) => {
       case LOG_OUT_FAILURE:
         draft.logOutLoading = fasle;
         draft.logOutDone = false;
-        draft.logOutError = action.data;
+        draft.logOutError = action.error;
         break;
 
       case SIGN_UP_REQUEST:
@@ -117,14 +117,17 @@ const reducer = (state = initialState, action) => {
         draft.signUpDone = false;
         draft.signUpError = false;
         break;
+
       case SIGN_UP_SUCCESS:
         draft.signUpDone = true;
         draft.signUpLoading = false;
+        draft.signUpError = false;
         break;
       case SIGN_UP_FAILURE:
+        console.log('여까지 오긴할까')
         draft.signUpDone = false;
         draft.signUpLoading = false;
-        draft.signUpError = action.data;
+        draft.signUpError = action.error;
         break;
 
       case CHANGE_NICKNAME_REQUEST:
@@ -161,7 +164,8 @@ const reducer = (state = initialState, action) => {
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
-        draft.followError = action.data;
+        draft.followError = action.error;
+        draft.followDone = false;
         break;
 
       case UNFOLLOW_REQUEST:
@@ -176,7 +180,8 @@ const reducer = (state = initialState, action) => {
         break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
-        draft.unfollowError = action.data;
+        draft.unfollowError = action.error;
+        draft.unfollowDone = action.error;
         break;
 
 
