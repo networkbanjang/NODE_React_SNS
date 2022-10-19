@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -12,19 +12,25 @@ import useinput from "../hooks/useinput";
 const ButtonWrapper = styled.div`
 margin-top:10px;
 `;
-const FormWrapper=styled(Form)`
+const FormWrapper = styled(Form)`
   padding : 10px;
 `;
 const LoginForm = () => {
-  const {logInLoading} = useSelector((state)=>state.user);
+  const { logInLoading, logInError } = useSelector((state) => state.user);
   const dispath = useDispatch();
 
   const [email, onChangeEmail] = useinput('');
   const [password, onChangePassword] = useinput('');
 
   const onSubmitForm = useCallback(() => {
-    dispath(loginRequestAction({email,password}));
+    dispath(loginRequestAction({ email, password }));
   }, [email, password]);
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  },[logInError])
 
   return (
     <FormWrapper onFinish={onSubmitForm}>

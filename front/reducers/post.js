@@ -76,25 +76,7 @@ export const addCommentRequest = (data) => ({
   data,
 });
 
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: '닉',
-  },
-  Images: [],
-  Comments: [],
-});
 
-const dummyComment = (data) => ({
-  id: 123123,
-  content: data,
-  User: {
-    id: 1,
-    nickname: 'ㅈㅈㅈ',
-  },
-});
 
 //이전 상태를 액션을 통해 다음상태로 만들어내는 함수
 //immer가 알아서 불변성 지켜서 해줌
@@ -126,7 +108,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.addPostLoading = false;
       draft.addPostDone = true;
       draft.addPostError = null;
-      draft.mainPosts.unshift(dummyPost(action.data));
+      draft.mainPosts.unshift(action.data);
       break;
     case ADD_POST_FAILURE:
       draft.addPostLoading = false;
@@ -157,8 +139,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.addCommentError = null;
       break;
     case ADD_COMMENT_SUCCESS:
-      const post = draft.mainPosts.find((e) => e.id === action.data.postId);
-      post.Comments.unshift(dummyComment(action.data.content));
+      const post = draft.mainPosts.find((e) => e.id === action.data.PostId);
+      post.Comments.unshift(action.data);
       draft.addCommentLoading = false;
       draft.addCommentDone = true;
       break;

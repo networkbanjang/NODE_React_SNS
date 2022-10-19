@@ -13,7 +13,7 @@ const SingUp = () => {
   const [password, onChangePassword] = useinput('');
 
   const dispatch = useDispatch();
-  const { signUpLoading,signUpDone,signUpError } = useSelector((state) => state.user);
+  const { signUpLoading,signUpDone,signUpError,me } = useSelector((state) => state.user);
 
   const style = useMemo(() => ({   //스타일설정
     color: 'red',
@@ -30,6 +30,12 @@ const SingUp = () => {
       alert(signUpError);
     }
   }, [signUpError]);
+
+  useEffect(() => {
+    if (me && me.id) {
+      Router.replace('/');
+    }
+  }, [me && me.id]);
 
   const [passowrdCheck, setPasswordCheck] = useState('');
   const [passowrdError, setPasswordError] = useState(false);

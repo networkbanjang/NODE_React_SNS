@@ -52,15 +52,6 @@ export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 
-const dummyUser = (data) => ({
-  data,
-  nickname: "제마눠",
-  id: 1,
-  Posts: [],
-  Followings: [{ nickname: "김1" }, { nickname: "김2" }, { nickname: "김3" }],
-  Followers: [{ nickname: "김1" }, { nickname: "김2" }, { nickname: "김3" }],
-})
-
 //동적 액션
 export const loginRequestAction = (data) => {
   return {
@@ -86,13 +77,11 @@ const reducer = (state = initialState, action) => {
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
-        draft.logInDone = false;
-        draft.logInError = action.data;
-        draft.me = null
+        draft.logInError = action.error;
         break;
 
       case LOG_OUT_REQUEST:
@@ -124,7 +113,6 @@ const reducer = (state = initialState, action) => {
         draft.signUpError = false;
         break;
       case SIGN_UP_FAILURE:
-        console.log('여까지 오긴할까')
         draft.signUpDone = false;
         draft.signUpLoading = false;
         draft.signUpError = action.error;
