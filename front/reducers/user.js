@@ -1,6 +1,9 @@
 import produce from 'immer';
 
 export const initialState = {
+  loadUserLoading: false, // 로드 유저
+  loadUserDone: false,
+  loadUserError: null,
   followLoading: false, // 팔로우 시도중
   followDone: false,
   followError: null,
@@ -51,6 +54,9 @@ export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
+export const LOAD_MY_INFO_REQUEST="LOAD_MY_INFO_REQUEST"
+export const LOAD_MY_INFO_SUCCESS="LOAD_MY_INFO_SUCCESS"
+export const LOAD_MY_INFO_FAILURE="LOAD_MY_INFO_FAILURE"
 
 //동적 액션
 export const loginRequestAction = (data) => {
@@ -69,6 +75,21 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserDone = false;
+        draft.loadUserError = false;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.me = action.data;
+        draft.loadUserDone = true;
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
+        break;
+
       case LOG_IN_REQUEST:
         draft.logInLoading = true;
         draft.logInDone = false;
@@ -90,8 +111,8 @@ const reducer = (state = initialState, action) => {
         draft.logOutError = false;
         break;
       case LOG_OUT_SUCCESS:
-        draft.logOutLoading = true;
-        draft.logOutDone = false;
+        draft.logOutLoading = false;
+        draft.logOutDone = true;
         draft.logOutError = false;
         draft.me = null;
         break;
@@ -171,7 +192,6 @@ const reducer = (state = initialState, action) => {
         draft.unfollowError = action.error;
         draft.unfollowDone = action.error;
         break;
-
 
       default:
         return state;

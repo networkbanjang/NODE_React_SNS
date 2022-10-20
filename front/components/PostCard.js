@@ -35,7 +35,6 @@ const PostCard = ({ post }) => {
     })
   },[]);
 
-  //아이디 체크 그런데 백엔드 구현하면 바뀔듯
   const id = useSelector((state) => state.user).me?.id;  //옵셔널 체이닝 AA ?. BB == 있으면 해라
   return (
     <div style={style}>
@@ -61,7 +60,7 @@ const PostCard = ({ post }) => {
       >
         
         <Card.Meta  
-          tar={<Avatar>{post.User.nickname[0]}</Avatar>}
+          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
           description={<PostCardContent postData={post.content}/>}
         />
@@ -96,7 +95,7 @@ PostCard.prototype = {
     id: PropTypes.number,
     User: PropTypes.object,
     content: PropTypes.string,
-    createAt: PropTypes.object,
+    createAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
