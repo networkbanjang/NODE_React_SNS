@@ -32,7 +32,7 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6} >
-          <a href='https:www.zerocho.com' target="_blank" rel="noreferrer noopener">Made by zeerocho</a>
+          <a href='http://localhost:3065/unfinished' target="_blank" rel="noreferrer noopener">업데이트 내역 보기</a>
         </Col>
       </Row>
     </div>

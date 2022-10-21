@@ -6,36 +6,49 @@ import PostImages from './Postimages';
 import { useMemo, useState, useCallback } from 'react'
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 import FollowButton from './Follow';
 
 const PostCard = ({ post }) => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   //css영역
   const style = useMemo(() => ({
     marginBottom: '20px',
   }), [])
   //state 영역
-  const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState(false);
 
 
   //이벤트 처리 영역
-  const onToggleLike = useCallback(() => {
-    setLiked(prev => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
+
+  const onUnLike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    })
+  }, []);
+
+
   const onComment = useCallback(() => {
     setComment(prev => !prev);
-  },[])
+  }, [])
 
-  const onRemovePost =useCallback(()=>{
+  const onRemovePost = useCallback(() => {
     dispatch({
-      type:REMOVE_POST_REQUEST,
-      data : post.id,
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
     })
-  },[]);
+  }, []);
 
   const id = useSelector((state) => state.user).me?.id;  //옵셔널 체이닝 AA ?. BB == 있으면 해라
+  const liked = post.Likers.find((e) => e.id === id);
+
   return (
     <div style={style}>
       <Card
@@ -43,8 +56,8 @@ const PostCard = ({ post }) => {
         actions={[
           <RetweetOutlined key="reteet" />,   //리트윗 아이콘 배열엔 반드시 key
           liked
-            ? <HeartTwoTone twoToneColor='red' key="heart" onClick={onToggleLike} />  //하트아이콘 비활성화
-            : <HeartOutlined key="heart" onClick={onToggleLike} />,     //하트 아이콘 활성화
+            ? <HeartTwoTone twoToneColor='red' key="heart" onClick={onUnLike} />  //하트아이콘 비활성화
+            : <HeartOutlined key="heart" onClick={onLike} />,     //하트 아이콘 활성화
           <MessageOutlined key="message" onClick={onComment} />,   //리플 아이콘
           <Popover key="more" content={(
             <Button.Group>
@@ -58,11 +71,11 @@ const PostCard = ({ post }) => {
         ]}
         extra={id && <FollowButton post={post} />}
       >
-        
-        <Card.Meta  
+
+        <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={<PostCardContent postData={post.content}/>}
+          description={<PostCardContent postData={post.content} />}
         />
         <Button></Button>
       </Card>
@@ -98,6 +111,7 @@ PostCard.prototype = {
     createAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
+    Likers:PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
 export default PostCard;
