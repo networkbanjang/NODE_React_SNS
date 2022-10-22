@@ -13,6 +13,9 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
@@ -24,12 +27,12 @@ import { ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS } from "../reducer
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
 //스크롤링
-function loadPostsAPI(data) {
-  return axios.get('/posts', data);
+function loadPostsAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}&limit=5`);
 }
 function* loadPosts(action) {
   try {
-    const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,
@@ -45,7 +48,7 @@ function* loadPosts(action) {
 
 //게시글 추가
 function addPostAPI(data) {
-  return axios.post(`/post`, { content: data })
+  return axios.post(`/post`, data)
 }
 
 function* addPost(action) {
@@ -135,11 +138,11 @@ function* unLikePost(action) {
   }
 }
 
+//게시글 삭제
 function removePostAPI(data) {
   return axios.delete(`/post/${data}`);
 }
 
-//게시글 삭제
 function* removePost(action) {
   try {
     const result = yield call(removePostAPI, action.data);
@@ -160,11 +163,11 @@ function* removePost(action) {
   }
 }
 
+//이미지 업로드
 function uploadImagesAPI(data) {
   return axios.post(`/post/images`, data);   //formdata는 감싸면 안됨
 }
 
-//이미지 업로드
 function* uploadImages(action) {
   try {
     const result = yield call(uploadImagesAPI, action.data);
@@ -181,7 +184,30 @@ function* uploadImages(action) {
     });
   }
 }
+
+//리트윗
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
+
+function* retweet(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: RETWEET_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 //지켜보고있다.
+
 function* watchLoadPosts() {
   yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
@@ -208,6 +234,11 @@ function* watchuploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 
+function* watchretweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet);
+}
+
+
 export default function* postSaga() {
   yield all([
     fork(watchuploadImages),
@@ -216,7 +247,7 @@ export default function* postSaga() {
     fork(watchRemovePost),
     fork(watchLoadPosts),
     fork(watchLikePost),
-    fork(watchUnLikeost)
-
+    fork(watchUnLikeost),
+    fork(watchretweet),
   ])
 }

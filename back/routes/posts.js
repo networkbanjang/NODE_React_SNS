@@ -2,27 +2,44 @@ const express = require('express');
 
 const { Post, User, Image, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
+const {Op} =require('sequelize');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
+    const limit = parseInt(req.query.limit,10);
+    const where = {};   //초기 로딩설정
+    if (parseInt(req.query.lastId, 10)) {//초기 로딩이 아닐때
+      where.id = {[Op.lt]: parseInt(req.query.lastId,10)}  //조건이 라스트 아이디보다 작은것으로 바낌
+     }
     const posts = await Post.findAll({
-      limit: 10,
+      where,
+      limit,
       order: [
-        [Comment, 'createdAt', 'DESC'], ['createdAt', 'DESC']],
+        ['createdAt', 'DESC'],
+        [Comment, 'createdAt', 'DESC'] ],
       include: [{
         model: User,
         attributes: ['id', 'nickname'],
       }, {
-        model:User,    //좋아요 누른사람
-        as:"Likers",
-        attributes:['id'],
-      },{
+        model: Post,
+        as: 'Retweet',
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+        }, {
+          model: Image,
+        }]
+      }, {
+        model: User,    //좋아요 누른사람
+        as: "Likers",
+        attributes: ['id'],
+      }, {
         model: Image,
       }, {
         model: Comment,
-        include: [{  
+        include: [{
           model: User,
           attributes: ['id', 'nickname'],
         }]

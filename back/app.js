@@ -6,9 +6,10 @@ const cors = require('cors');  //헤더에 cors 끼워넣기 1
 const postRouter = require('./routes/post')
 const postsRouter = require('./routes/posts')
 const userRouter = require('./routes/user')
-const morgan = require('morgan')      ;  // log보기용
+const morgan = require('morgan');  // log보기용
 const dotenv = require('dotenv');
 const passportConfig = require('./passport');
+const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -30,6 +31,7 @@ app.use(cors({
   origin: 'http://localhost:3060',  //헤더 넘기기
   credentials: true, //쿠키도 넘김
 })) //모든 응답에 cors넣기
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json())  //json 읽기 프론트에서 보낸걸 req.body로 넣어주는 역할을함
 app.use(express.urlencoded({ extended: true }));
@@ -46,7 +48,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());    //passport의 deserializeUser실행
-
 //get,post,put,delete,patch,options,head 
 app.get('/', (req, res) => {
   res.send('FIST EXPRESS!');
