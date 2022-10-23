@@ -15,6 +15,9 @@ import {
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
+  LOAD_OTHER_FAILURE,
+  LOAD_OTHER_REQUEST,
+  LOAD_OTHER_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -159,13 +162,13 @@ function* unfollow(action) {
   }
 }
 
-function loadUserAPI(data) {
+function loadUserAPI() {            //내정보 가지고오기
   return axios.get('/user');
 }
 
 function* loadUser(action) {
   try {
-    const result = yield call(loadUserAPI, action.data);
+    const result = yield call(loadUserAPI);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
@@ -173,6 +176,27 @@ function* loadUser(action) {
   } catch (err) {
     yield put({
       type: LOAD_MY_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+
+ 
+function loadOtherAPI(data) {                           //남의 정보 가지고오기
+  return axios.get(`/user/${data}`);
+}
+
+function* loadOther(action) {
+  try {
+    const result = yield call(loadOtherAPI, action.data);
+    yield put({
+      type: LOAD_OTHER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_OTHER_FAILURE,
       error: err.response.data,
     });
   }
@@ -229,6 +253,11 @@ function* watchLoadFollowers() {
 function* watchLoadFollowings() {
   yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
 }
+
+function* watchotherInfo() {
+  yield takeLatest(LOAD_OTHER_REQUEST, loadOther);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLoadFollowers),
@@ -240,5 +269,6 @@ export default function* userSaga() {
     fork(watchFollow),
     fork(watchunFollow),
     fork(watchChangeNick),
+    fork(watchotherInfo),
   ])
 }

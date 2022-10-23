@@ -5,6 +5,7 @@ export const initialState = {
   loadUserDone: false,
   loadUserError: null,
 
+
   followLoading: false, // 팔로우 시도중
   followDone: false,
   followError: null,
@@ -36,9 +37,12 @@ export const initialState = {
   loadFollowersDone: false,
   loadFollowersError: null,
 
+  loadOtherLoading: false,
+  loadOtherDone: false,
+  loadOtherError: false,
+
   me: null,
-  signUpData: {},
-  loginData: {},
+  userInfo: null,
 };
 
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
@@ -80,6 +84,12 @@ export const LOAD_FOLLOWERS_FAILURE = "LOAD_FOLLOWERS_FAILURE"
 export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST'
 export const LOAD_FOLLOWINGS_SUCCESS = "LOAD_FOLLOWINGS_SUCCESS"
 export const LOAD_FOLLOWINGS_FAILURE = "LOAD_FOLLOWINGS_FAILURE"
+
+export const LOAD_OTHER_REQUEST = 'LOAD_OTHER_REQUEST'
+export const LOAD_OTHER_SUCCESS = "LOAD_OTHER_SUCCESS"
+export const LOAD_OTHER_FAILURE = "LOAD_OTHER_FAILURE"
+
+
 
 //팔로우 차단기능 생략
 
@@ -242,13 +252,29 @@ const reducer = (state = initialState, action) => {
         break;
       case LOAD_FOLLOWINGS_SUCCESS:
         draft.loadFollowersLoading = false;
-        draft.me.Followings=action.data;
+        draft.me.Followings = action.data;
         draft.loadFollowersDone = true;
         break;
       case LOAD_FOLLOWINGS_FAILURE:
         draft.loadFollowersLoading = false;
         draft.loadFollowersError = action.error;
         draft.loadFollowersDone = false;
+        break;
+
+      case LOAD_OTHER_REQUEST:
+        draft.loadOtherLoading = true;
+        draft.loadOtherError = false;
+        draft.loadOtherDone = false;
+        break;
+      case LOAD_OTHER_SUCCESS:
+        draft.loadOtherLoading = false;
+        draft.userInfo = action.data;
+        draft.loadOtherDone = true;
+        break;
+      case LOAD_OTHER_FAILURE:
+        draft.loadOtherLoading = false;
+        draft.loadOtherError = action.error;
+        draft.loadOthersDone = false;
         break;
       default:
         return state;

@@ -1,11 +1,14 @@
 import AppLayout from "../components/AppLayout";
 import Head from 'next/head'
 import { Form, Input, Checkbox, Button } from "antd";
-import { useCallback, useState, useMemo ,useEffect} from 'react';
+import { useCallback, useState, useMemo, useEffect } from 'react';
 import useinput from "../hooks/useinput";
 import { useDispatch, useSelector } from "react-redux";
-import { SIGN_UP_REQUEST } from "../reducers/user";
+import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from "../reducers/user";
 import Router from "next/router";
+import wrapper from "../store/configureStore";
+import axios from "axios";
+import { END } from "redux-saga";
 
 const SingUp = () => {
   const [email, onChangeEmail] = useinput('');
@@ -13,17 +16,17 @@ const SingUp = () => {
   const [password, onChangePassword] = useinput('');
 
   const dispatch = useDispatch();
-  const { signUpLoading,signUpDone,signUpError,me } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
 
   const style = useMemo(() => ({   //스타일설정
     color: 'red',
   }), [])
 
-  useEffect(()=>{
-    if(signUpDone){
+  useEffect(() => {
+    if (signUpDone) {
       Router.replace('/');
     }
-  },[signUpDone]);
+  }, [signUpDone]);
 
   useEffect(() => {
     if (signUpError) {
@@ -104,5 +107,20 @@ const SingUp = () => {
     </AppLayout>
   )
 }
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';   //헤더 정보가 context.req안에 들어있음
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+
+  context.store.dispatch(END);
+  console.log('엔드!');
+  await context.store.sagaTask.toPromise();
+})
 
 export default SingUp;

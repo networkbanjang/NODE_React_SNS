@@ -5,19 +5,23 @@ import FollowList from "../components/FollowList";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import Router from "next/router";
-import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST } from "../reducers/user";
+import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST, LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import axios from "axios";
+import wrapper from "../store/configureStore";
+import { END } from "redux-saga";
+import { LOAD_POSTS_REQUEST } from "../reducers/post";
 
 const Profile = () => {
   const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch({
       type: LOAD_FOLLOWERS_REQUEST,
     });
     dispatch({
       type: LOAD_FOLLOWINGS_REQUEST,
     });
-  },[]);
+  }, []);
 
 
   const { me } = useSelector((state) => state.user);
@@ -42,5 +46,21 @@ const Profile = () => {
     </>
   )
 }
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';   //헤더 정보가 context.req안에 들어있음
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
 
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+  context.store.dispatch({
+    type: LOAD_POSTS_REQUEST,
+  });
+  context.store.dispatch(END);
+  console.log('엔드!');
+  await context.store.sagaTask.toPromise();
+})
 export default Profile;

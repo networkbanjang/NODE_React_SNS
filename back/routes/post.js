@@ -51,7 +51,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {  // /pos
     if (Array.isArray(req.body.image)) {   //이미지 여러개면 배열
       const images = await Promise.all(req.body.image.map(image => Image.create({ src: image })));
       await result.addImages(images);
-    } else {   //이미지 하나면 스트링
+    } else if (req.body.image) {   //이미지 하나면 스트링
       const image = await Image.create({ src: req.body.image });
       await result.addImages(image);
     }
@@ -203,13 +203,45 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
           model: User,
           attributes: ['id', 'nickname'],
         }],
-      },{
+      }, {
         model: User,    //좋아요 누른사람
         as: "Likers",
         attributes: ['id'],
       }],
     })
     res.status(201).json(retweetWithPrevPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+})
+
+router.get('/:postId', async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+      include: [{
+        model: User,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: Image,
+      }, {
+        model: Comment,
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+          order: [['createdAt', 'DESC']],
+        }],
+      }, {
+        model: User, // 좋아요 누른 사람
+        as: 'Likers',
+        attributes: ['id'],
+      }],
+    });
+    if(!post){
+      return res.status(403).send('해당 게시글이 없습니다.');
+    }
+    res.status(200).json(post);
   } catch (error) {
     console.error(error);
     next(error);
