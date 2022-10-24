@@ -5,16 +5,20 @@
   "main": "index.js",
   "scripts": {
     "dev": "next -p 3060",
-    "bulid": "next build"
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start -p 3060"
   },
   "author": "SEONG SEUNG YOUNG",
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@next/bundle-analyzer": "^12.3.1",
     "antd": "^4.23.5",
     "axios": "^1.1.3",
     "babel-plugin-styled-components": "^2.0.7",
+    "cross-env": "^7.0.3",
     "immer": "^9.0.15",
+    "moment": "^2.29.4",
     "next": "^12.3.1",
     "next-redux-wrapper": "^6.0.2",
     "prop-types": "^15.8.1",
@@ -23,7 +27,8 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.2.1",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "swr": "^1.3.0"
   },
   "devDependencies": {
     "eslint": "^8.25.0",

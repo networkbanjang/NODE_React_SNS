@@ -136,7 +136,9 @@ router.get('/followers', isLoggedIn, async (req, res, next) => {
     if (!user) {
       return res.status(403).send('잘못 된 요청입니다.');
     }
-    const followers = await user.getFollowers();
+    const followers = await user.getFollowers({
+      limit: parseInt(req.query.limit),
+    });
     res.status(200).json(followers);
   } catch (error) {
     console.error(error);
@@ -150,7 +152,9 @@ router.get('/followings', isLoggedIn, async (req, res, next) => {
     if (!user) {
       return res.status(403).send('잘못 된 요청입니다.');
     }
-    const followings = await user.getFollowings();
+    const followings = await user.getFollowings({
+      limit: parseInt(req.query.limit),
+    });
     res.status(200).json(followings);
   } catch (error) {
     console.error(error);

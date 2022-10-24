@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
 import 'antd/dist/antd.css'
 import Head from 'next/head';
+import 'antd/dist/antd.css';
 
 import wrapper from "../store/configureStore";
 
 const App = ({ Component }) => {
+
+    
     return (
         <>
             <Head>

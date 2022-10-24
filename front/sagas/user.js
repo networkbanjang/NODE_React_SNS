@@ -29,45 +29,7 @@ import {
 import { LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS } from '../reducers/user';
 import axios from 'axios'
 
-function loadFollowersAPI(data) {
-  return axios.get('/user/followers', data);
-}
 
-function* loadFollowers(action) {
-  try {
-    const result = yield call(loadFollowersAPI, action.data);
-    yield put({
-      type: LOAD_FOLLOWERS_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOAD_FOLLOWERS_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
-function loadFollowingsAPI(data) {
-  return axios.get('/user/followings', data);
-}
-
-function* loadFollowings(action) {
-  try {
-    const result = yield call(loadFollowingsAPI, action.data);
-    yield put({
-      type: LOAD_FOLLOWINGS_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOAD_FOLLOWINGS_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
 
 function logInAPI(data) {
   return axios.post('/user/login', data);
@@ -247,12 +209,6 @@ function* watchChangeNick() {
   yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNick);
 }
 
-function* watchLoadFollowers() {
-  yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
-}
-function* watchLoadFollowings() {
-  yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
-}
 
 function* watchotherInfo() {
   yield takeLatest(LOAD_OTHER_REQUEST, loadOther);
@@ -260,8 +216,6 @@ function* watchotherInfo() {
 
 export default function* userSaga() {
   yield all([
-    fork(watchLoadFollowers),
-    fork(watchLoadFollowings),
     fork(watchLoadUser),
     fork(watchLogin),
     fork(watchLogOut),

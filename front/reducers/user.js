@@ -1,4 +1,4 @@
-import produce from 'immer';
+import produce from '../util/produce';
 
 export const initialState = {
   loadUserLoading: false, // 로드 유저
@@ -30,12 +30,12 @@ export const initialState = {
   changeNicknameDone: false,
   changeNicknameError: null,
 
-  loadFollowingsLoading: false,  //팔로잉,팔로워
-  loadFollowingsDone: false,
-  loadFollowingsError: null,
-  loadFollowersLoading: false,
-  loadFollowersDone: false,
-  loadFollowersError: null,
+  // loadFollowingsLoading: false,  //팔로잉,팔로워
+  // loadFollowingsDone: false,
+  // loadFollowingsError: null,
+  // loadFollowersLoading: false,
+  // loadFollowersDone: false,
+  // loadFollowersError: null,
 
   loadOtherLoading: false,
   loadOtherDone: false,
@@ -229,37 +229,37 @@ const reducer = (state = initialState, action) => {
         draft.unfollowDone = false;
         break;
 
-      case LOAD_FOLLOWERS_REQUEST:
-        draft.loadFollowingsLoading = true;
-        draft.loadFollowingsError = false;
-        draft.loadFollowingsDone = false;
-        break;
-      case LOAD_FOLLOWERS_SUCCESS:
-        draft.loadFollowingsLoading = false;
-        draft.me.Followers = action.data;
-        draft.loadFollowingsDone = true;
-        break;
-      case LOAD_FOLLOWERS_FAILURE:
-        draft.loadFollowingsLoading = false;
-        draft.loadFollowingsError = action.error;
-        draft.loadFollowingsDone = false;
-        break;
+      // case LOAD_FOLLOWERS_REQUEST:
+      //   draft.loadFollowingsLoading = true;
+      //   draft.loadFollowingsError = false;
+      //   draft.loadFollowingsDone = false;
+      //   break;
+      // case LOAD_FOLLOWERS_SUCCESS:
+      //   draft.loadFollowingsLoading = false;
+      //   draft.me.Followers = action.data;
+      //   draft.loadDone = true;
+      //   break;
+      // case LOAD_FOLLOWERS_FAILURE:
+      //   draft.loadFollowiFollowingsngsLoading = false;
+      //   draft.loadFollowingsError = action.error;
+      //   draft.loadFollowingsDone = false;
+      //   break;
 
-      case LOAD_FOLLOWINGS_REQUEST:
-        draft.loadFollowersLoading = true;
-        draft.loadFollowersError = false;
-        draft.loadFollowersDone = false;
-        break;
-      case LOAD_FOLLOWINGS_SUCCESS:
-        draft.loadFollowersLoading = false;
-        draft.me.Followings = action.data;
-        draft.loadFollowersDone = true;
-        break;
-      case LOAD_FOLLOWINGS_FAILURE:
-        draft.loadFollowersLoading = false;
-        draft.loadFollowersError = action.error;
-        draft.loadFollowersDone = false;
-        break;
+      // case LOAD_FOLLOWINGS_REQUEST:
+      //   draft.loadFollowersLoading = true;
+      //   draft.loadFollowersError = false;
+      //   draft.loadFollowersDone = false;
+      //   break;
+      // case LOAD_FOLLOWINGS_SUCCESS:
+      //   draft.loadFollowersLoading = false;
+      //   draft.me.Followings = action.data;
+      //   draft.loadFollowersDone = true;
+      //   break;
+      // case LOAD_FOLLOWINGS_FAILURE:
+      //   draft.loadFollowersLoading = false;
+      //   draft.loadFollowersError = action.error;
+      //   draft.loadFollowersDone = false;
+      //   break;
 
       case LOAD_OTHER_REQUEST:
         draft.loadOtherLoading = true;
