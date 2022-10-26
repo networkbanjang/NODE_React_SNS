@@ -2,7 +2,7 @@ import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import NickNameEditForm from "../components/NickNameEditForm";
 import FollowList from "../components/FollowList";
-import useSWR from "SWR";
+import useSWR from "swr";
 
 import { useSelector } from "react-redux";
 import { useEffect, useState, useCallback } from 'react';
