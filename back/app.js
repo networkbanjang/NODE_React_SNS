@@ -27,6 +27,8 @@ db.sequelize.sync()
 
 passportConfig();  //패스포트 설정값 불러오기
 
+app.set('port', process.env.PORT || 3065);   // 포트설정
+
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))  //배포용 로그
 } else {
@@ -65,6 +67,6 @@ app.use('/posts', postsRouter);
 app.use('/hashtag', hashtagRouter);
 
 
-app.listen(3065, () => {
-  console.log('서버 실행중');
+app.listen(app.get('port'), () => {
+  console.log(app.get('port'), '번 포트에서 대기중');
 });
