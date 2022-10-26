@@ -93,7 +93,7 @@ dist
 
 # Serverless directories
 .serverless/
-nodebird-front.pem
+nodereact.pem
 
 
 # FuseBox cache
