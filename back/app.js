@@ -27,8 +27,11 @@ db.sequelize.sync()
 
 passportConfig();  //패스포트 설정값 불러오기
 
-app.use(morgan('dev')) //개발용 로그
-
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'))  //배포용 로그
+} else {
+  app.use(morgan('dev')) //개발용 로그
+}
 app.use(cors({
   origin: 'http://localhost:3060',  //헤더 넘기기
   credentials: true, //쿠키도 넘김
