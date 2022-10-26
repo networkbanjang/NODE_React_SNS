@@ -44,11 +44,11 @@ app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json())  //json 읽기 프론트에서 보낸걸 req.body로 넣어주는 역할을함
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cookieParser(process.env.COOKIE_SECRERT));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
   saveUninitialized: false,
   resave: false,
-  secret: process.env.COOKIE_SECRERT,
+  secret: process.env.COOKIE_SECRET,
   cookie: {                //cookie도 넣기
     httpOnly: true,
     secure: false,
