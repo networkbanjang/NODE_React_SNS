@@ -15,6 +15,9 @@ const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const hpp = require('hpp');
+
+const { default: helmet } = require('helmet');
 
 dotenv.config() //.env에 있는 설정 가져오기
 const app = express();  //익스프레스 호출
@@ -31,11 +34,13 @@ app.set('port', process.env.PORT || 3065);   // 포트설정
 
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))  //배포용 로그
+  app.use(hpp());        //보안에 필요
+  app.use(helmet());      
 } else {
   app.use(morgan('dev')) //개발용 로그
 }
 app.use(cors({
-  origin: 'http://localhost:3060',  //헤더 넘기기
+  origin: ['http://localhost:3060','next_express.com'],  //헤더 넘기기
   credentials: true, //쿠키도 넘김
 })) //모든 응답에 cors넣기
 
