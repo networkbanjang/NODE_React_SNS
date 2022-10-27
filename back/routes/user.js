@@ -88,8 +88,9 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 });
 
 router.post('/logout', isLoggedIn, (req, res) => {
-  req.session.destroy();
-  res.send('OK');
+  req.logout(() => {
+    res.redirect('/');
+  });
 })
 
 router.post('/', isNotLoggedIn, async (req, res, next) => {
@@ -108,7 +109,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       nickname: req.body.nick,
       password: bcryptPW,
     });
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3060')
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3060')
     res.status(201).send('완료');
   } catch (error) {
     console.error(error);
