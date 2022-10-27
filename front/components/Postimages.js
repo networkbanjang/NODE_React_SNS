@@ -3,6 +3,7 @@ import { useCallback, useState, useMemo } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import { Card } from "antd";
 import ImageZoom from './imagesZoom';
+import backurl from '../config/config';
 
 
 const PostImages = ({ images }) => {
@@ -27,7 +28,7 @@ const PostImages = ({ images }) => {
   if (images.length === 1) {
     return (
       <div>
-        <img role="presentation" src={`http://localhost:3065/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+        <img role="presentation" src={`${backurl()}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
         {showImageZoom && <ImageZoom images={images} onClose={onClose} />}
       </div>
     );
@@ -35,8 +36,8 @@ const PostImages = ({ images }) => {
   if (images.length === 2) {
     return (
       <div>
-        <img role="presentation" width="50%" src={`http://localhost:3065/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
-        <img role="presentation" width="50%" src={`http://localhost:3065/${images[1].src}`} alt={images[1].src} onClick={onZoom} />
+        <img role="presentation" width="50%" src={`${backurl()}${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+        <img role="presentation" width="50%" src={`${backurl()}${images[1].src}`} alt={images[1].src} onClick={onZoom} />
         {showImageZoom && <ImageZoom images={images} onClose={onClose} />}
 
       </div>
@@ -44,7 +45,7 @@ const PostImages = ({ images }) => {
   }
   return (
     <div>
-      <img role="presentation" width="50%" src={`http://localhost:3065/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+      <img role="presentation" width="50%" src={`${backurl()}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
       <div role='presentation' style={style} onClick={onZoom}>
         <PlusOutlined />
         <br />

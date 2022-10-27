@@ -8,6 +8,7 @@ import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import wrapper from "../store/configureStore";
 import { END } from 'redux-saga';
 import axios from 'axios';
+import backurl from "../config/config";
 
 const Home = () => {
   const { me } = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ const Home = () => {
 
   return (
     <AppLayout>
+
       {me && <PostForm />}
       {mainPosts.map((post) => {
         return (<PostCard key={post.id} post={post} />)
