@@ -5,7 +5,6 @@ import postSaga from './post';
 import userSaga from './user';
 import backurl from '../config/config';
 const backURL= backurl();
-console.log(backURL);
 axios.defaults.baseURL = backURL  //베이스 URL 설정하기
 axios.defaults.withCredentials = true;
 
