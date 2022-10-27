@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev')) //개발용 로그
 }
 app.use(cors({
-  origin: ['http://localhost:3060','next_express.com','http://3.34.253.158'],  //헤더 넘기기
+  origin: ['http://localhost:3060','http://54.180.128.214:81'],  //헤더 넘기기
   credentials: true, //쿠키도 넘김
 })) //모든 응답에 cors넣기
 
