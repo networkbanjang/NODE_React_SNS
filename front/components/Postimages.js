@@ -28,7 +28,7 @@ const PostImages = ({ images }) => {
   if (images.length === 1) {
     return (
       <div>
-        <img role="presentation" src={`${backurl()}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+        <img role="presentation" src={`${backurl}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
         {showImageZoom && <ImageZoom images={images} onClose={onClose} />}
       </div>
     );
@@ -36,8 +36,8 @@ const PostImages = ({ images }) => {
   if (images.length === 2) {
     return (
       <div>
-        <img role="presentation" width="50%" src={`${backurl()}${images[0].src}`} alt={images[0].src} onClick={onZoom} />
-        <img role="presentation" width="50%" src={`${backurl()}${images[1].src}`} alt={images[1].src} onClick={onZoom} />
+        <img role="presentation" width="50%" src={`${backurl}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+        <img role="presentation" width="50%" src={`${backurl}/${images[1].src}`} alt={images[1].src} onClick={onZoom} />
         {showImageZoom && <ImageZoom images={images} onClose={onClose} />}
 
       </div>
@@ -45,7 +45,7 @@ const PostImages = ({ images }) => {
   }
   return (
     <div>
-      <img role="presentation" width="50%" src={`${backurl()}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+      <img role="presentation" width="50%" src={`${backurl}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
       <div role='presentation' style={style} onClick={onZoom}>
         <PlusOutlined />
         <br />

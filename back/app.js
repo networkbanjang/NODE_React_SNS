@@ -35,12 +35,12 @@ app.set('port', process.env.PORT || 3065);   // 포트설정
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))  //배포용 로그
   app.use(hpp());        //보안에 필요
-  app.use(helmet());      
+  app.use(helmet.crossOriginResourcePolicy({policy:'cross-origin'}));       //cors 크로스 오리진
 } else {
   app.use(morgan('dev')) //개발용 로그
 }
 app.use(cors({
-  origin: ['http://localhost:3060','http://54.180.128.214:81'],  //헤더 넘기기
+  origin: ['http://localhost:3060'],  //헤더 넘기기
   credentials: true, //쿠키도 넘김
 })) //모든 응답에 cors넣기
 
