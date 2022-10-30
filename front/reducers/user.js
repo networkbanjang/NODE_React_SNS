@@ -30,13 +30,6 @@ export const initialState = {
   changeNicknameDone: false,
   changeNicknameError: null,
 
-  // loadFollowingsLoading: false,  //팔로잉,팔로워
-  // loadFollowingsDone: false,
-  // loadFollowingsError: null,
-  // loadFollowersLoading: false,
-  // loadFollowersDone: false,
-  // loadFollowersError: null,
-
   loadOtherLoading: false,
   loadOtherDone: false,
   loadOtherError: false,
@@ -229,38 +222,6 @@ const reducer = (state = initialState, action) => {
         draft.unfollowDone = false;
         break;
 
-      // case LOAD_FOLLOWERS_REQUEST:
-      //   draft.loadFollowingsLoading = true;
-      //   draft.loadFollowingsError = false;
-      //   draft.loadFollowingsDone = false;
-      //   break;
-      // case LOAD_FOLLOWERS_SUCCESS:
-      //   draft.loadFollowingsLoading = false;
-      //   draft.me.Followers = action.data;
-      //   draft.loadDone = true;
-      //   break;
-      // case LOAD_FOLLOWERS_FAILURE:
-      //   draft.loadFollowiFollowingsngsLoading = false;
-      //   draft.loadFollowingsError = action.error;
-      //   draft.loadFollowingsDone = false;
-      //   break;
-
-      // case LOAD_FOLLOWINGS_REQUEST:
-      //   draft.loadFollowersLoading = true;
-      //   draft.loadFollowersError = false;
-      //   draft.loadFollowersDone = false;
-      //   break;
-      // case LOAD_FOLLOWINGS_SUCCESS:
-      //   draft.loadFollowersLoading = false;
-      //   draft.me.Followings = action.data;
-      //   draft.loadFollowersDone = true;
-      //   break;
-      // case LOAD_FOLLOWINGS_FAILURE:
-      //   draft.loadFollowersLoading = false;
-      //   draft.loadFollowersError = action.error;
-      //   draft.loadFollowersDone = false;
-      //   break;
-
       case LOAD_OTHER_REQUEST:
         draft.loadOtherLoading = true;
         draft.loadOtherError = false;
@@ -276,6 +237,9 @@ const reducer = (state = initialState, action) => {
         draft.loadOtherError = action.error;
         draft.loadOthersDone = false;
         break;
+
+
+    
       default:
         return state;
 

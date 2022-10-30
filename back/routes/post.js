@@ -81,6 +81,31 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {  // /pos
   }
 })
 
+router.patch('/:postId', isLoggedIn, async (req, res, next) => {
+  const hashtag = req.body.content.match(/#[^\s#]+/g);
+  try {
+    await Post.update({
+      content: req.body.content
+    }, {
+      where: {
+        id: req.params.postId,
+        UserId: req.user.id,
+      },
+    });
+    const post = await Post.findOne({where: {id:req.params.postId}});
+    if (hashtag) {
+      const hash = await Promise.all(hashtag.map((tag) => Hashtag.findOrCreate({
+        where: { name: tag.slice(1).toLowerCase() },
+      })));
+      await post.setHashtags(hash.map((v) => v[0]));
+    }
+    res.status(200).json({ PostId: parseInt(req.params.postId), content: req.body.content });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+})
+
 router.delete('/:postId', isLoggedIn, async (req, res, next) => {
   try {
     await Post.destroy({
@@ -238,7 +263,7 @@ router.get('/:postId', async (req, res, next) => {
         attributes: ['id'],
       }],
     });
-    if(!post){
+    if (!post) {
       return res.status(403).send('해당 게시글이 없습니다.');
     }
     res.status(200).json(post);

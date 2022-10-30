@@ -6,7 +6,7 @@ import PostImages from './Postimages';
 import { useMemo, useState, useCallback } from 'react'
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST, UPDATE_POST_REQUEST } from '../reducers/post';
 import FollowButton from './Follow';
 import Link from 'next/link';
 import moment from 'moment';
@@ -24,6 +24,7 @@ const PostCard = ({ post }) => {
   }), [])
   //state 영역
   const [comment, setComment] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
 
   //이벤트 처리 영역
@@ -53,6 +54,24 @@ const PostCard = ({ post }) => {
     })
   }, []);
 
+  const onChangePost = useCallback(() => {
+    setEditMode(true);
+  }, []);
+
+  const onCancelUpdate=useCallback(()=>{
+    setEditMode(false);
+  },[]);
+
+  const onUpdate=useCallback((editText) =>()=>{
+    dispatch({
+      type:UPDATE_POST_REQUEST,
+      data:{
+        postId:post.id,
+        content:editText,
+      }
+    })
+  },[post])
+
   const onRetweet = useCallback(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
@@ -62,6 +81,9 @@ const PostCard = ({ post }) => {
       data: post.id,
     }, [id]);
   })
+
+
+
   const liked = post.Likers.find((e) => e.id === id);
 
   return (
@@ -76,7 +98,8 @@ const PostCard = ({ post }) => {
           <MessageOutlined key="message" onClick={onComment} />,   //리플 아이콘
           <Popover key="more" content={(
             <Button.Group>
-              {id && post.User.id === id ? (<><Button type='primary'>수정</Button>
+              {id && post.User.id === id ? (<>
+                {!post.RetweetId && <Button onClick={onChangePost} type='primary' >수정</Button>}
                 <Button type='danger' onClick={onRemovePost}>삭제</Button> </>)
                 : <Button>신고</Button>}
             </Button.Group>
@@ -99,7 +122,7 @@ const PostCard = ({ post }) => {
                   <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar> </a>
                 </Link>}
                 title={post.Retweet.User.nickname}
-                description={<PostCardContent postData={post.Retweet.content} />}
+                description={<PostCardContent onCancelUpdate={onCancelUpdate}  onUpdate={onUpdate}  postData={post.Retweet.content} />}
               />
             </Card>
           )
@@ -111,7 +134,7 @@ const PostCard = ({ post }) => {
                   <a><Avatar>{post.User.nickname[0]}</Avatar> </a>
                 </Link>}
                 title={post.User.nickname}
-                description={<PostCardContent postData={post.content} />}
+                description={<PostCardContent  onCancelUpdate={onCancelUpdate} onUpdate={onUpdate} editMode={editMode} postData={post.content} />}
               />
             </>
           )}

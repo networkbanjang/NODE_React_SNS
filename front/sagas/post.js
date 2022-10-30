@@ -7,6 +7,9 @@ import {
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
+  LOAD_FOLLOWINGPOSTS_FAILURE,
+  LOAD_FOLLOWINGPOSTS_REQUEST,
+  LOAD_FOLLOWINGPOSTS_SUCCESS,
   LOAD_HASHTAG_POSTS_FAILURE,
   LOAD_HASHTAG_POSTS_REQUEST,
   LOAD_HASHTAG_POSTS_SUCCESS,
@@ -28,6 +31,9 @@ import {
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  UPDATE_POST_FAILURE,
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS
@@ -272,6 +278,47 @@ function* retweet(action) {
   }
 }
 
+//게시글 수정
+function updatePostAPI(data) {
+  return axios.patch(`/post/${data.postId}`,data);
+}
+
+function* updatePost(action) {
+  try {
+    const result = yield call(updatePostAPI, action.data);
+    yield put({
+      type: UPDATE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPDATE_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+
+//팔로잉한 게시글
+function loadFollowingPostsAPI(data, lastId) {
+  return axios.get(`/posts/following?limit=5&lastId=${lastId || 0}`);
+}
+function* loadFollowingPosts(action) {
+  try {
+    const result = yield call(loadFollowingPostsAPI, action.lastId);
+    yield put({
+      type: LOAD_FOLLOWINGPOSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FOLLOWINGPOSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 //지켜보고있다.
 
 function* watchLoadPosts() {
@@ -284,6 +331,10 @@ function* watchLoadUserPosts() { //유저검색
 
 function* watchLoadHashtagPosts() {//해쉬태그
   yield throttle(5000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+}
+
+function* watchFollowingPosts() {//팔로잉 유저 게시글 보기
+  yield throttle(5000, LOAD_FOLLOWINGPOSTS_REQUEST, loadFollowingPosts);
 }
 
 function* watchLoadPost() {  //단일
@@ -316,6 +367,10 @@ function* watchretweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
 
+function* watchUpdatePost() {
+  yield takeLatest(UPDATE_POST_REQUEST, updatePost);
+}
+
 
 export default function* postSaga() {
   yield all([
@@ -330,6 +385,7 @@ export default function* postSaga() {
     fork(watchLoadPosts),
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),
-
+    fork(watchUpdatePost),
+    fork(watchFollowingPosts),
   ])
 }

@@ -41,6 +41,10 @@ export const initialState = {
   retweetDone: false,
   retweetError: null,
 
+  updateLoading: false,  //수정
+  updateDone: false,
+  updateError: false,
+
   singlePost: null,
 };
 
@@ -88,6 +92,14 @@ export const LOAD_USER_POSTS_FAILURE = "LOAD_USER_POSTS_FAILURE";
 export const LOAD_HASHTAG_POSTS_REQUEST = 'LOAD_HASHTAG_POSTS_REQUEST';
 export const LOAD_HASHTAG_POSTS_SUCCESS = 'LOAD_HASHTAG_POSTS_SUCCESS';
 export const LOAD_HASHTAG_POSTS_FAILURE = 'LOAD_HASHTAG_POSTS_FAILURE';
+
+export const LOAD_FOLLOWINGPOSTS_REQUEST = 'LOAD_FOLLOWINGPOSTS_REQUEST';
+export const LOAD_FOLLOWINGPOSTS_SUCCESS = 'LOAD_FOLLOWINGPOSTS_SUCCESS';
+export const LOAD_FOLLOWINGPOSTS_FAILURE = 'LOAD_FOLLOWINGPOSTS_FAILURE';
+
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST'
+export const UPDATE_POST_SUCCESS = "UPDATE_POST_SUCCESS"
+export const UPDATE_POST_FAILURE = "UPDATE_POST_FAILURE"
 
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
@@ -141,6 +153,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
     case LOAD_USER_POSTS_REQUEST:
     case LOAD_HASHTAG_POSTS_REQUEST:
+    case LOAD_FOLLOWINGPOSTS_REQUEST:
     case LOAD_POSTS_REQUEST:  //게시글보기
       draft.loadPostsLoading = true;
       draft.loadPostsDone = false;
@@ -149,6 +162,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
     case LOAD_USER_POSTS_SUCCESS:
     case LOAD_HASHTAG_POSTS_SUCCESS:
+    case LOAD_FOLLOWINGPOSTS_SUCCESS:
     case LOAD_POSTS_SUCCESS:
       draft.loadPostsLoading = false;
       draft.loadPostsDone = true;
@@ -158,6 +172,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
     case LOAD_USER_POSTS_FAILURE:
     case LOAD_HASHTAG_POSTS_FAILURE:
+    case LOAD_FOLLOWINGPOSTS_FAILURE:
     case LOAD_POSTS_FAILURE:
       draft.loadPostsLoading = false;
       draft.loadPostsError = action.error;
@@ -265,6 +280,23 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.retweetLoading = false;
       draft.retweetError = action.error;
       break;
+
+    case UPDATE_POST_REQUEST:  //수정
+      draft.updateLoading = true;
+      draft.updateLError = false;
+      draft.updateDone = false;
+      break;
+    case UPDATE_POST_SUCCESS:
+      draft.updateLoading = false;
+      draft.updateDone = true;
+      draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+      break;
+    case UPDATE_POST_FAILURE:
+      draft.updateLoading = false;
+      draft.updateLError = action.error;
+      draft.updateLDone = false;
+      break;
+
     default:
       break;
   }
