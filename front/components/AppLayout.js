@@ -25,7 +25,7 @@ const AppLayout = ({ children }) => {
   return (
     <div>
       <Menu mode="horizontal">
-        <Menu.Item key='123'><Link href="/"><a>노드버드</a></Link></Menu.Item>
+        <Menu.Item key='123'><Link href="/"><a>메인</a></Link></Menu.Item>
         <Menu.Item key='234'><Link href="/profile"><a>프로필</a></Link></Menu.Item>
         <Menu.Item key='456'> <SearchInput enterButton
         value={searchInput} 

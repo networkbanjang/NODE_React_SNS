@@ -4,16 +4,18 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAction, loginRequestAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 import useinput from "../hooks/useinput";
 
 
 
 const ButtonWrapper = styled.div`
-margin-top:10px;
+  margin-top: 10px;
 `;
+
 const FormWrapper = styled(Form)`
-  padding : 10px;
+  padding: 15px;
+  margin:10px;
 `;
 const LoginForm = () => {
   const { logInLoading, logInError } = useSelector((state) => state.user);
@@ -30,7 +32,7 @@ const LoginForm = () => {
     if (logInError) {
       alert(logInError);
     }
-  },[logInError])
+  }, [logInError])
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
@@ -47,7 +49,9 @@ const LoginForm = () => {
       <ButtonWrapper>
         <Button type='primary' htmlType='submit' loading={logInLoading} >로그인</Button>
         <Link href='/signUp'><a><Button>회원가입</Button></a></Link>
+        <a href= 'http://localhost:3065/loginappend/kakaologin'> <Button >카카오톡</Button></a>
       </ButtonWrapper>
+
     </FormWrapper>
   );
 

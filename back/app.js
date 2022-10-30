@@ -7,6 +7,7 @@ const postRouter = require('./routes/post')
 const postsRouter = require('./routes/posts')
 const userRouter = require('./routes/user')
 const hashtagRouter = require('./routes/hashtag');
+const loginRouter = require('./routes/loginappend');
 
 const morgan = require('morgan');  // log보기용
 const dotenv = require('dotenv');
@@ -70,6 +71,7 @@ app.use('/post', postRouter);
 app.use('/user', userRouter);
 app.use('/posts', postsRouter);
 app.use('/hashtag', hashtagRouter);
+app.use('/loginappend', loginRouter);
 
 
 app.listen(app.get('port'), () => {

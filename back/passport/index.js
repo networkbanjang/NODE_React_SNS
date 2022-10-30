@@ -1,6 +1,7 @@
 //여기가 패스토프 설정 파일
 const passport = require('passport');
 const local = require('./local');
+const kakao =require('./kakao')
 const { User } = require('../models');
 
 module.exports = () => {
@@ -18,4 +19,5 @@ module.exports = () => {
   });
 
   local();
+  kakao();  //passport에서 실행
 }
