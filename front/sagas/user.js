@@ -16,6 +16,9 @@ import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_OUT_FAILURE,
+  SEND_EMAIL_FAILURE,
+  SEND_EMAIL_REQUEST,
+  SEND_EMAIL_SUCCESS,
   UNFOLLOW_FAILURE,
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS
@@ -138,7 +141,7 @@ function* loadUser(action) {
 }
 
 
- 
+
 function loadOtherAPI(data) {                           //남의 정보 가지고오기
   return axios.get(`/user/${data}`);
 }
@@ -177,6 +180,25 @@ function* changeNick(action) {  //닉네임변경
   }
 }
 
+function sendEmailAPI(data) { //인증번호 보내기
+  return axios.post('/user/sendMail', data );
+}
+
+function* sendEmail(action) {  
+  try {
+    const result = yield call(sendEmailAPI, action.data);
+    yield put({
+      type: SEND_EMAIL_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: SEND_EMAIL_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 //지켜보고있다
 function* watchLoadUser() {
   yield takeLatest(LOAD_MY_INFO_REQUEST, loadUser);
@@ -208,6 +230,10 @@ function* watchotherInfo() {
   yield takeLatest(LOAD_OTHER_REQUEST, loadOther);
 }
 
+function* watchSendMail() {
+  yield takeLatest(SEND_EMAIL_REQUEST, sendEmail);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLoadUser),
@@ -218,5 +244,6 @@ export default function* userSaga() {
     fork(watchunFollow),
     fork(watchChangeNick),
     fork(watchotherInfo),
+    fork(watchSendMail),
   ])
 }

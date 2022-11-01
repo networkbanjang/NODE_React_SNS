@@ -1,15 +1,16 @@
-exports.isLoggedIn = (req,res,next) =>{
-  if (req.isAuthenticated()){
+exports.isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
     next();
-  }else {
+  } else {
     res.status(401).send('로그인이 필요합니다.');
   }
 }
 
-exports.isNotLoggedIn = (req,res,next) =>{
-  if (!req.isAuthenticated()){
+exports.isNotLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
     next();
-  }else {
+  } else {
     res.status(401).send('로그아웃을 해주십시오');
   }
 }
+

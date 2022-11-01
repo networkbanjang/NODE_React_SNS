@@ -17,6 +17,7 @@ const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const hpp = require('hpp');
+const webSocket= require('./socket.js');
 
 const { default: helmet } = require('helmet');
 
@@ -45,10 +46,13 @@ app.use(cors({
   credentials: true, //쿠키도 넘김
 })) //모든 응답에 cors넣기
 
+
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json())  //json 읽기 프론트에서 보낸걸 req.body로 넣어주는 역할을함
 app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
@@ -63,9 +67,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());    //passport의 deserializeUser실행
 //get,post,put,delete,patch,options,head 
+
 app.get('/', (req, res) => {
   res.send('FIST EXPRESS!');
 });
+
+
 
 app.use('/post', postRouter);
 app.use('/user', userRouter);
@@ -74,6 +81,8 @@ app.use('/hashtag', hashtagRouter);
 app.use('/loginappend', loginRouter);
 
 
-app.listen(app.get('port'), () => {
+const server= app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중');
 });
+
+// webSocket(server, app);  웹소켓 예정

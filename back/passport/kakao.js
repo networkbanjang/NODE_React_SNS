@@ -6,7 +6,7 @@ const User = require('../models/user');
 module.exports = () => {
   passport.use(new KakaoLogin({
     clientID: process.env.KAKAO_ID,
-    callbackURL: '/loginappend/kakao',
+    callbackURL: '/loginappend/kakao',  //콜백 링크 지정
   }, async (accessToken, refreshToken, profile, done) => {
 
     try {

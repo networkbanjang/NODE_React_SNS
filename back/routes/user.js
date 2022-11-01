@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const passport = require('passport');
+const nodemailer = require('nodemailer');
 
 const { User, Post, Image, Comment } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -270,5 +271,35 @@ router.get('/:id', async (req, res, next) => { // 남의 정보 가져오기
   }
 });
 
+router.post('/sendMail', async (req, res, next) => { // EMAIL 보내기
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,  //gmail은 기본적으로 587포트
+    secure: false,
+    auth: {
+      // Gmail 주소, 보안상 .env에있음
+      user: process.env.GMAIL_ID,
+      // Gmail 2차 비밀번호
+      pass: process.env.GMAIL_PASSWORD,
+    },
+  });
+  try {
+    const info = await transporter.sendMail({
+      // 보내는 곳의 이름과, 메일 주소
+      from: `"REACT_EXPRESS" <${process.env.GMAIL_ID}>`,
+      // 받는 곳의 메일 주소
+      to: req.body.email,
+      // 보내는 메일의 제목을 입력
+      subject: '인증번호입니다.',
+
+      text: `인증번호는 : ${req.body.number}입니다.`,
+    });
+    return res.status(200).send(req.body.number);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;

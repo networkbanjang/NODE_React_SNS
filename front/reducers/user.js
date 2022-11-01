@@ -5,7 +5,6 @@ export const initialState = {
   loadUserDone: false,
   loadUserError: null,
 
-
   followLoading: false, // 팔로우 시도중
   followDone: false,
   followError: null,
@@ -34,8 +33,14 @@ export const initialState = {
   loadOtherDone: false,
   loadOtherError: false,
 
+  sendEmailLoading: false,
+  sendEmailDone: false,
+  sendEmailError: false,
+
+
   me: null,
   userInfo: null,
+  mailnumber:null,
 };
 
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
@@ -81,6 +86,10 @@ export const LOAD_FOLLOWINGS_FAILURE = "LOAD_FOLLOWINGS_FAILURE"
 export const LOAD_OTHER_REQUEST = 'LOAD_OTHER_REQUEST'
 export const LOAD_OTHER_SUCCESS = "LOAD_OTHER_SUCCESS"
 export const LOAD_OTHER_FAILURE = "LOAD_OTHER_FAILURE"
+
+export const SEND_EMAIL_REQUEST = 'SEND_EMAIL_REQUEST'
+export const SEND_EMAIL_SUCCESS = "SEND_EMAIL_SUCCESS"
+export const SEND_EMAIL_FAILURE = "SEND_EMAIL_FAILURE"
 
 
 
@@ -238,8 +247,23 @@ const reducer = (state = initialState, action) => {
         draft.loadOthersDone = false;
         break;
 
+      case SEND_EMAIL_REQUEST:
+        draft.sendEmailLoading = true;
+        draft.sendEmailError = false;
+        draft.sendEmailDone = false;
+        break;
+      case SEND_EMAIL_SUCCESS:
+        draft.sendEmailLoading = false;
+        draft.sendEmailDone = true;
+        draft.mailnumber=action.data
+        break;
+      case SEND_EMAIL_FAILURE:
+        draft.sendEmailLoading = false;
+        draft.sendEmailError = action.error;
+        draft.sendEmailDone = false;
+        break;
 
-    
+
       default:
         return state;
 
