@@ -1,21 +1,39 @@
-import { Button, Form, Input, Card } from "antd";
-import { useSelector } from 'react-redux';
-import Chatingroom from "./Chatingroom";
+import { Card } from "antd";
+import { useEffect, useState, useCallback } from 'react';
 import { io } from "socket.io-client"; //웹소켓
+import LetterForm from "./letterForm";
+import LetterProps from "./letterProps";
 
-const Chatinguser = () => {
-  const socket = io('http://localhost:3065', {
+const Chatinguser = ({ me }) => {
+  const [arrayList, setArrayList] = useState([]);
+
+  const socket = io.connect('http://localhost:3065', {
     cors: {
       origin: "*",
+      credentials: true,
     },
-  });
+    path: '/socket.io',
+    transports: ['websocket'],
+  })
+
+  useEffect(() => { socket.emit('firstJoin', me.nickname); }, [])
+
+
+
+  socket.on('userUpdate', (list) => {
+    setArrayList(list);
+  })
+
+
+
   return (
     <>
-    <Card style={{ width: 300 }} title='접속중인 유저'>
-        <p>밸류</p>
-       
-    </Card>
-    <Chatingroom/>
+      <Card style={{ width: 300 }} title='접속중인 유저'>
+        {arrayList.map((props) => {
+          return <LetterForm props={props} socket={socket} me={me}/>
+        })}
+      </Card>
+      <LetterProps socket={socket} />
     </>
   )
 }

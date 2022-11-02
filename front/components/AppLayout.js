@@ -50,7 +50,7 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6} >
-          업데이트 예정
+          {me ? <Chatinguser me={me}/> : null}
         </Col>
       </Row>
     </div>

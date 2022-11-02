@@ -280,7 +280,7 @@ router.post('/sendMail', async (req, res, next) => { // EMAIL 보내기
     auth: {
       // Gmail 주소, 보안상 .env에있음
       user: process.env.GMAIL_ID,
-      // Gmail 2차 비밀번호
+      // Gmail 앱 비밀번호
       pass: process.env.GMAIL_PASSWORD,
     },
   });
