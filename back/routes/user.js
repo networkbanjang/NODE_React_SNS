@@ -3,10 +3,19 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
 
 const { User, Post, Image, Comment } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { Op } = require('sequelize');
+const multer = require('multer');
+
+try {
+  fs.accessSync('uploads/profiles'); //디렉터리 접근
+} catch (error) {
+  fs.mkdirSync('uploads/profiles')  //없으면 디렉터리생성
+}
 
 router.get('/', async (req, res, next) => {   //GET /user
   try {
@@ -296,6 +305,47 @@ router.post('/sendMail', async (req, res, next) => { // EMAIL 보내기
       text: `인증번호는 : ${req.body.number}입니다.`,
     });
     return res.status(200).send(req.body.number);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+const upload = multer({
+  storage: multer.diskStorage({  //디스크에
+    destination(req, file, done) {   //파일경로
+      done(null, 'uploads/profiles')
+    },
+    filename(req, file, done) {             //파일명
+      const ext = path.extname(file.originalname); // 오리지널 네임의 확장자 추출
+      if (ext !== '.jpeg' && ext !== '.png' && ext !== '.gif') {
+        return;
+      }
+      const basename = path.basename(file.originalname, ext);  //오리지널네임+확장자
+      done(null, basename + '_' + new Date().getTime() + ext);  //에러처리, 파일명항목(베이스네임+날짜+확장자)
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, //20MB
+})
+
+router.post('/profileUpdate', isLoggedIn, upload.single('image'), async (req, res, next) => { // 프로필 수정
+  if (req.file) {
+    console.log('성공!')
+    return res.status(200).send(req.file.filename);
+  }
+  console.log('실패')
+  return res.status(500).send('파일의 확장자가 맞지않거나 파일의 전송이 이뤄지지 않았습니다.')
+});
+
+router.patch('/profileSubmit', isLoggedIn, async (req, res, next) => {
+
+  try {
+    await User.update({
+      profile:req.body.profile,
+    }, {
+      where: { id: req.user.id },
+    });
+    res.status(200).json({ profile: req.body.profile });
   } catch (error) {
     console.error(error);
     next(error);

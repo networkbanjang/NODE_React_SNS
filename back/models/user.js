@@ -12,7 +12,7 @@ module.exports = class User extends Model {
       },
       nickname: {
         type: DataTypes.STRING(30),
-        allowNull: false, // 필수
+        allowNull: false,
       },
       password: {
         type: DataTypes.STRING(100),
@@ -21,7 +21,11 @@ module.exports = class User extends Model {
       snsId: {
         type: DataTypes.STRING(45),
         allowNull: true,
-      }
+      },
+      profile: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
     }, {
       modelName: 'User',
       tableName: 'users',

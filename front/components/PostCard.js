@@ -58,19 +58,19 @@ const PostCard = ({ post }) => {
     setEditMode(true);
   }, []);
 
-  const onCancelUpdate=useCallback(()=>{
+  const onCancelUpdate = useCallback(() => {
     setEditMode(false);
-  },[]);
+  }, []);
 
-  const onUpdate=useCallback((editText) =>()=>{
+  const onUpdate = useCallback((editText) => () => {
     dispatch({
-      type:UPDATE_POST_REQUEST,
-      data:{
-        postId:post.id,
-        content:editText,
+      type: UPDATE_POST_REQUEST,
+      data: {
+        postId: post.id,
+        content: editText,
       }
     })
-  },[post])
+  }, [post])
 
   const onRetweet = useCallback(() => {
     if (!id) {
@@ -119,10 +119,12 @@ const PostCard = ({ post }) => {
               <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY-MM-DD')}</div>
               <Card.Meta
                 avatar={<Link href={`/user/${post.Retweet.User.id}`}>
-                  <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar> </a>
+                  {post.Retweet.User.profile ?
+                    <a><Avatar src={'http://localhost:3065/profiles/' + post.Retweet.User.profile} /></a> :
+                    <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar> </a>}
                 </Link>}
                 title={post.Retweet.User.nickname}
-                description={<PostCardContent onCancelUpdate={onCancelUpdate}  onUpdate={onUpdate}  postData={post.Retweet.content} />}
+                description={<PostCardContent onCancelUpdate={onCancelUpdate} onUpdate={onUpdate} postData={post.Retweet.content} />}
               />
             </Card>
           )
@@ -131,10 +133,13 @@ const PostCard = ({ post }) => {
               <div style={{ float: 'right' }}>{moment(post.createdAt).fromNow()}</div>
               <Card.Meta
                 avatar={<Link href={`/user/${post.User.id}`}>
-                  <a><Avatar>{post.User.nickname[0]}</Avatar> </a>
+                  {post.User.profile ?
+                    <a><Avatar src={'http://localhost:3065/profiles/' + post.User.profile} /></a> :
+                    <a><Avatar>{post.User.nickname[0]}</Avatar> </a>}
+
                 </Link>}
                 title={post.User.nickname}
-                description={<PostCardContent  onCancelUpdate={onCancelUpdate} onUpdate={onUpdate} editMode={editMode} postData={post.content} />}
+                description={<PostCardContent onCancelUpdate={onCancelUpdate} onUpdate={onUpdate} editMode={editMode} postData={post.content} />}
               />
             </>
           )}
@@ -150,7 +155,9 @@ const PostCard = ({ post }) => {
               <li>
                 <Comment author={item.User.nickname}
                   avatar={<Link href={`/user/${item.User.id}`}>
-                    <a><Avatar>{item.User.nickname[0]}</Avatar></a>
+                    {item.User.profile ?
+                      <a><Avatar src={'http://localhost:3065/profiles/' + item.User.profile} /></a> :
+                      <a><Avatar>{item.User.nickname[0]}</Avatar></a>}
                   </Link>}
                   content={item.content}
                 />

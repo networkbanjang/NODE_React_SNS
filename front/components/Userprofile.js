@@ -22,7 +22,7 @@ const UserProfile = () => {
 
       <Card.Meta 
       avatar={(<Link href={`/user/${me.id}`} prefetch={false}>
-        <a><Avatar>{me.nickname[0]}</Avatar></a>
+        {me.profile ? <Avatar src={"http://localhost:3065/profiles/"+me.profile}/> : <a><Avatar>{me.nickname[0]}</Avatar></a>}
       </Link>
       )} title={me.nickname} />
       <Button onClick={logout} loading={logOutLoading}>로그 아웃</Button>

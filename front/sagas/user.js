@@ -16,6 +16,12 @@ import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_OUT_FAILURE,
+  PROFILE_SUBMIT_FAILURE,
+  PROFILE_SUBMIT_REQUEST,
+  PROFILE_SUBMIT_SUCCESS,
+  PROFILE_UPDATE_FAILURE,
+  PROFILE_UPDATE_REQUEST,
+  PROFILE_UPDATE_SUCCESS,
   SEND_EMAIL_FAILURE,
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -161,11 +167,11 @@ function* loadOther(action) {
   }
 }
 
-function changeNickAPI(data) {
+function changeNickAPI(data) {//닉네임변경
   return axios.patch('/user/nickname', { nickname: data });
 }
 
-function* changeNick(action) {  //닉네임변경
+function* changeNick(action) {  
   try {
     const result = yield call(changeNickAPI, action.data);
     yield put({
@@ -181,10 +187,10 @@ function* changeNick(action) {  //닉네임변경
 }
 
 function sendEmailAPI(data) { //인증번호 보내기
-  return axios.post('/user/sendMail', data );
+  return axios.post('/user/sendMail', data);
 }
 
-function* sendEmail(action) {  
+function* sendEmail(action) {
   try {
     const result = yield call(sendEmailAPI, action.data);
     yield put({
@@ -194,6 +200,44 @@ function* sendEmail(action) {
   } catch (err) {
     yield put({
       type: SEND_EMAIL_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function prifileUpdateAPI(data) { //프로필 수정
+  return axios.post('/user/profileUpdate', data);
+}
+
+function* prifileUpdate(action) {
+  try {
+    const result = yield call(prifileUpdateAPI, action.data);
+    yield put({
+      type: PROFILE_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: PROFILE_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function prifileSubmitAPI(data) { //프로필 수정 적용
+  return axios.patch('/user/profilesubmit', { profile: data });
+}
+
+function* prifileSubmit(action) {
+  try {
+    const result = yield call(prifileSubmitAPI, action.data);
+    yield put({
+      type: PROFILE_SUBMIT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: PROFILE_SUBMIT_FAILURE,
       error: err.response.data,
     });
   }
@@ -234,6 +278,14 @@ function* watchSendMail() {
   yield takeLatest(SEND_EMAIL_REQUEST, sendEmail);
 }
 
+function* watchProfileUpdate() {
+  yield takeLatest(PROFILE_UPDATE_REQUEST, prifileUpdate);
+}
+
+function* watchProfileSubmit() {
+  yield takeLatest(PROFILE_SUBMIT_REQUEST, prifileSubmit);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLoadUser),
@@ -245,5 +297,8 @@ export default function* userSaga() {
     fork(watchChangeNick),
     fork(watchotherInfo),
     fork(watchSendMail),
+    fork(watchProfileUpdate),
+    fork(watchProfileSubmit),
+
   ])
 }

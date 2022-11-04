@@ -33,14 +33,21 @@ export const initialState = {
   loadOtherDone: false,
   loadOtherError: false,
 
-  sendEmailLoading: false,
+  sendEmailLoading: false,  //이메일 보내기
   sendEmailDone: false,
   sendEmailError: false,
 
+  profileUpdateLoading: false,    //프로필 업데이트하기
+  profileUpdateError: false,
+  profileUpdateDone: false,
+
+  profileSubmitLoading: false,    //프로필 업데이트하기
+  profileSubmitError: false,
+  profileSubmitDone: false,
 
   me: null,
   userInfo: null,
-  mailnumber:null,
+  mailnumber: null,
 };
 
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
@@ -91,6 +98,13 @@ export const SEND_EMAIL_REQUEST = 'SEND_EMAIL_REQUEST'
 export const SEND_EMAIL_SUCCESS = "SEND_EMAIL_SUCCESS"
 export const SEND_EMAIL_FAILURE = "SEND_EMAIL_FAILURE"
 
+export const PROFILE_UPDATE_REQUEST = 'PROFILE_UPDATE_REQUSET'
+export const PROFILE_UPDATE_SUCCESS = "PROFILE_UPDATE_SUCCESS"
+export const PROFILE_UPDATE_FAILURE = "PROFILE_UPDATE_FAILURE"
+
+export const PROFILE_SUBMIT_REQUEST = 'PROFILE_SUBMIT_REQUEST'
+export const PROFILE_SUBMIT_SUCCESS = "PROFILE_SUBMIT_SUCCESS"
+export const PROFILE_SUBMIT_FAILURE = "PROFILE_SUBMIT_FAILURE"
 
 
 //팔로우 차단기능 생략
@@ -247,7 +261,7 @@ const reducer = (state = initialState, action) => {
         draft.loadOthersDone = false;
         break;
 
-      case SEND_EMAIL_REQUEST:
+      case SEND_EMAIL_REQUEST:   //이메일
         draft.sendEmailLoading = true;
         draft.sendEmailError = false;
         draft.sendEmailDone = false;
@@ -255,7 +269,7 @@ const reducer = (state = initialState, action) => {
       case SEND_EMAIL_SUCCESS:
         draft.sendEmailLoading = false;
         draft.sendEmailDone = true;
-        draft.mailnumber=action.data
+        draft.mailnumber = action.data
         break;
       case SEND_EMAIL_FAILURE:
         draft.sendEmailLoading = false;
@@ -263,6 +277,36 @@ const reducer = (state = initialState, action) => {
         draft.sendEmailDone = false;
         break;
 
+      case PROFILE_UPDATE_REQUEST:  //프로필 사진 수정
+        draft.profileUpdateLoading = true;
+        draft.profileUpdateError = false;
+        draft.profileUpdateDone = false;
+        break;
+      case PROFILE_UPDATE_SUCCESS:
+        draft.profileUpdateLoading = false;
+        draft.me.profile = action.data;
+        draft.profileUpdateDone = true;
+        break;
+      case PROFILE_UPDATE_FAILURE:
+        draft.profileUpdateLoading = false;
+        draft.profileUpdateError = action.error;
+        draft.profileUpdateDone = false;
+        break;
+
+      case PROFILE_UPDATE_REQUEST:  //프로필 사진 적용
+        draft.profileSubmitLoading = true;
+        draft.profileSubmitError = false;
+        draft.profileSubmitDone = false;
+        break;
+      case PROFILE_UPDATE_SUCCESS:
+        draft.profileSubmitLoading = false;
+        draft.profileSubmitDone = true;
+        break;
+      case PROFILE_UPDATE_FAILURE:
+        draft.profileSubmitLoading = false;
+        draft.profileSubmitError = action.error;
+        draft.profileSubmitDone = false;
+        break;
 
       default:
         return state;

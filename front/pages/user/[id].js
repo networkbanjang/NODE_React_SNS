@@ -74,7 +74,9 @@ const User = () => {
             ]}
           >
             <Card.Meta
-              avatar={<Avatar>{userInfo.nickname[0]}</Avatar>}
+              avatar={userInfo.profile ?
+                <Avatar src={'http://localhost:3065/profiles/' + userInfo.profile} />
+                : <Avatar>{userInfo.nickname[0]}</Avatar>}
               title={userInfo.nickname}
             />
           </Card>

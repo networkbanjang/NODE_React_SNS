@@ -40,8 +40,7 @@ module.exports = (server, app) => {
     });
     
     socket.on('message',(data)=>{
-      console.log(data);
-      io.to(data.id).emit('letter',data)
+      io.to(data.id).emit('letter',data)  //해당 socket.id를 가진 사람에게 데이터 보냄
     })
   })
 }

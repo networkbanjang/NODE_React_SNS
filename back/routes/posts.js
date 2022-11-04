@@ -21,13 +21,13 @@ router.get('/', async (req, res, next) => {
         [Comment, 'createdAt', 'DESC'] ],
       include: [{
         model: User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }, {
         model: Post,
         as: 'Retweet',
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }, {
           model: Image,
         }]
@@ -41,7 +41,7 @@ router.get('/', async (req, res, next) => {
         model: Comment,
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }]
       }],
     });
@@ -79,13 +79,13 @@ router.get('/following', async (req, res, next) => {
         [Comment, 'createdAt', 'DESC'] ],
       include: [{
         model: User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }, {
         model: Post,
         as: 'Retweet',
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }, {
           model: Image,
         }]
@@ -99,7 +99,7 @@ router.get('/following', async (req, res, next) => {
         model: Comment,
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }]
       }],
     });

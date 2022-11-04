@@ -6,7 +6,6 @@ const fs = require('fs');
 
 const { Post, Image, Comment, User, Hashtag } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const user = require('../models/user');
 
 try {
   fs.accessSync('uploads'); //디렉터리 접근
@@ -63,11 +62,11 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {  // /pos
         model: Comment,
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }]
       }, {
         model: User,  //게시글 작성자
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }, {
         model: User,    //좋아요 누른사람
         as: "Likers",
@@ -166,7 +165,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
       where: { id: comment.id },
       include: [{
         model: User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }],
     })
     res.status(201).json(fullComment);
@@ -213,20 +212,20 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
         as: 'Retweet',
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }, {
           model: Image,
         }]
       }, {
         model: User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }, {
         model: Image,
       }, {
         model: Comment,
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
         }],
       }, {
         model: User,    //좋아요 누른사람
@@ -247,14 +246,14 @@ router.get('/:postId', async (req, res, next) => {
       where: { id: req.params.postId },
       include: [{
         model: User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname','profile'],
       }, {
         model: Image,
       }, {
         model: Comment,
         include: [{
           model: User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname','profile'],
           order: [['createdAt', 'DESC']],
         }],
       }, {
